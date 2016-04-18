@@ -115,10 +115,10 @@ def slaves_histogram(slaves):
         for label in labels:
             if histo.get(label):
                 histo[label]['total'] = str(int(histo[label]['total']) + 1)
-                if slave['idle'] == 'True':
+                if slave['idle'] == 'True' and slave['status'] == 'online':
                     histo[label]['idle'] = str(int(histo[label]['idle']) + 1)
             else:
-                if slave['idle'] == 'True':
+                if slave['idle'] == 'True' and slave['status'] == 'online':
                     histo[label] = {'total': '1', 'idle': '1'}
                 else:
                     histo[label] = {'total': '1', 'idle': '0'}
