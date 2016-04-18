@@ -190,6 +190,7 @@ def get_queue(url, user, password):
                           key=operator.itemgetter('waiting_time'),
                           reverse=True)
     qinfo.jobs = sorted_queue
+    qinfo.total = len(sorted_queue)
 
     return qinfo
 
@@ -309,6 +310,8 @@ def main():
             qinfo = get_queue(args.jenkins_url, args.jenkins_user,
                               args.jenkins_pass)
             send_graphite(qinfo.labels, args.graphite_host,
+                          args.prefix + '.inqueue')
+            send_graphite({'total: ': qinfo.total}, args.graphite_host,
                           args.prefix + '.inqueue')
             slaves = get_slaves(args.jenkins_url, args.jenkins_user,
                                 args.jenkins_pass)
