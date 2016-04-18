@@ -311,7 +311,7 @@ def main():
                               args.jenkins_pass)
             send_graphite(qinfo.labels, args.graphite_host,
                           args.prefix + '.inqueue')
-            send_graphite({'total: ': qinfo.total}, args.graphite_host,
+            send_graphite({'total': qinfo.total}, args.graphite_host,
                           args.prefix + '.inqueue')
             slaves = get_slaves(args.jenkins_url, args.jenkins_user,
                                 args.jenkins_pass)
