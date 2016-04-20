@@ -334,8 +334,6 @@ def main():
                 logging.info('cache flushed, %s iterations' % cache_counter)
                 cache_counter = 0
         except Exception:
-            logging.exception('in main, sleeping for %ss', args.interval)
-            time.sleep(args.interval)
             logging.exception('entering loop again after exception')
             pass
         time.sleep(args.interval)
