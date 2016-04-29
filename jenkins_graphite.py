@@ -111,7 +111,8 @@ def slaves_histogram(slaves):
             total_online += 1
             if slave['idle'] == 'True':
                 total_idle += 1
-        labels = slave.get('label', 'No_Label').split(' ')
+        labels = (['No_Label'] if slave.get('label', None) is None else
+                  slave.get('label', '').split(' '))
         for label in labels:
             if histo.get(label):
                 histo[label]['total'] = str(int(histo[label]['total']) + 1)
