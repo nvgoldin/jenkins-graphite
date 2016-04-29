@@ -111,7 +111,7 @@ def slaves_histogram(slaves):
             total_online += 1
             if slave['idle'] == 'True':
                 total_idle += 1
-        labels = slave['label'].split(' ')
+        labels = slave.get('label', 'No_Label').split(' ')
         for label in labels:
             if histo.get(label):
                 histo[label]['total'] = str(int(histo[label]['total']) + 1)
@@ -152,7 +152,7 @@ def _collect_slaves(url, user, password):
             node_md['label'] = node_config['slave']['label']
             node_md['idle'] = str(node_info['idle'])
             launcher = node_config['slave']['launcher']['@class']
-            if launcher == 'hudson.plugins.sshslaves.SSHLauncher':
+            if launcher == jenkins.LAUNCHER_SSH:
                 hostname = node_config['slave']['launcher']['host']
                 node_md['hostname'] = hostname
             nodes_metadata.append(node_md)
