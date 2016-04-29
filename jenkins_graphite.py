@@ -323,21 +323,22 @@ def main():
                                              args.jenkins_pass),
                           args.graphite_host,
                           args.prefix)
-            cache_counter += 1
             send_graphite(get_internal_stats(cache_renew - cache_counter,
                                              args.interval,
                                              time.clock() - begin),
                           args.graphite_host,
                           args.prefix)
-            if cache_counter == cache_renew:
-                _get_job_label.cache_clear()
-                _get_job_config.cache_clear()
-                logging.info('cache flushed, %s iterations' % cache_counter)
-                cache_counter = 0
         except Exception:
             logging.exception('entering loop again after exception')
             pass
-        time.sleep(args.interval)
+        finally:
+            cache_counter += 1
+            if cache_counter == cache_renew:
+                _get_job_label.cache_clear()
+                _get_job_config.cache_clear()
+                logging.info('cache flushed, %s iterations', cache_counter)
+                cache_counter = 0
+            time.sleep(args.interval)
 
 
 if __name__ == "__main__":
