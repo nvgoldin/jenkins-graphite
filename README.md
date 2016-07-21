@@ -1,27 +1,15 @@
-# jenkins-graphite
-Send Jenkins metrics to Graphite, the following metrics are pulled and sent:
-- Number of running jobs per label:
-	- systems.{fqdn}.{prefix}.builds.label.__labels extracted from job__.running
-- Number of jobs in queue per label:	
-	- systems.{fqdn}.{prefix}.inqueue.__labels extracted from job__.running
-- Number of jobs in queue:
-	- systems.{fqdn}.{prefix}.inqueue.total.running
-- Number of builds running per job:
-	- systems.{fqdn}.{prefix}.jobs.__job name__.running
-- Number of online/idle slaves per label:
-	- systems.{fqdn}.{prefix}.slaves.labels.__slave_label__.total
-	- systems.{fqdn}.{prefix}.slaves.labels.__slave_label__.idle
-- Total number of idle/online/total slaves:
-	- systems.{fqdn}.{prefix}.slaves.totals.idle
-	- systems.{fqdn}.{prefix}.slaves.totals.online
-	- systems.{fqdn}.{prefix}.slaves.totals.total
+# Jenkins-graphite - Send Jenkins build stats to Graphite
 
-- Internal stats, time until cache is flushed:
-	- systems.{fqdn}.{prefix}.internal.cache.renew
-- Internal stats, sampling interval(as specified by --cache--renew):
-	- systems.{fqdn}.{prefix}.internal.sample.rate
-- Internal stats, time it took to pull stats from jenkins and send to graphite
-	- systems.{fqdn}.{prefix}.internal.sending.time
+
+![alt tag](examples/pics/builds_running_per_label.png)
+
+Jenkins-graphite is a small script that pulls metrics from 
+[Jenkins](https://jenkins.io/) and sends them to 
+[Graphite](https://graphite.readthedocs.io/en/latest/), it uses the Jenkins CLI
+to pull the metrics. The above graph was created using 
+[Grafana](http://grafana.org/).
+
+This was build for the [oVirt project](http://www.ovirt.org/).
 
 # Requirments
 ```
@@ -35,8 +23,7 @@ jenkins==1.0.2
 
 # Installation
 1. Clone this repository: ``git clone http://github.com/nvgoldin/jenkins-graphite.git``
-1. Create a Jenkins user with read rights to collect the metrics.
-2. And run: 
+2. Create a Jenkins user with read rights to collect the metrics.
 
 # Usage
 - Run:
@@ -81,6 +68,28 @@ optional arguments:
   --log_file LOG_FILE   where to write the logfile
 ```
 
+# Which metrics are collected under what prefix:
+- Number of running jobs per label:
+	- systems.{fqdn}.{prefix}.builds.label.__labels extracted from job__.running
+- Number of jobs in queue per label:	
+	- systems.{fqdn}.{prefix}.inqueue.__labels extracted from job__.running
+- Number of jobs in queue:
+	- systems.{fqdn}.{prefix}.inqueue.total.running
+- Number of builds running per job:
+	- systems.{fqdn}.{prefix}.jobs.__job name__.running
+- Number of online/idle slaves per label:
+	- systems.{fqdn}.{prefix}.slaves.labels.__slave_label__.total
+	- systems.{fqdn}.{prefix}.slaves.labels.__slave_label__.idle
+- Total number of idle/online/total slaves:
+	- systems.{fqdn}.{prefix}.slaves.totals.idle
+	- systems.{fqdn}.{prefix}.slaves.totals.online
+	- systems.{fqdn}.{prefix}.slaves.totals.total
+- Internal stats, time until cache is flushed:
+	- systems.{fqdn}.{prefix}.internal.cache.renew
+- Internal stats, sampling interval(as specified by --cache--renew):
+	- systems.{fqdn}.{prefix}.internal.sample.rate
+- Internal stats, time it took to pull stats from jenkins and send to graphite
+	- systems.{fqdn}.{prefix}.internal.sending.time
 # Cache
 The labels each job is restricted to are pulled by downloading the Job's .xml
 file, as this is (relatively) an expensive operation, a cache is used, 
@@ -89,6 +98,16 @@ flushed. If your labels change often, you can reduce it accordingly.
 
 
 # Graph examples
-These were generated using Grafana, if there is demand I can add the json
-dashboard.
+These were generated using Grafana, if anyone wants I can
+add the json template.
 
+- Average number of builds:
+![alt tag](examples/pics/average_builds.png)
+- Builds running per label:
+![alt tag](examples/pics/builds_running_per_label.png)
+- Idle slaves:
+![alt tag](examples/pics/idle_slaves.png)
+- Running builds:
+![alt tag](examples/pics/running_builds.png)
+- Slave utilization vs Builds in Queue:
+![alt tag](examples/pics/slaves_util.png)
